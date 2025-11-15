@@ -21,7 +21,7 @@ export default function Home() {
 
   useEffect(() => {
     setMounted(true)
-    fetchSiteConfig()
+    fetchConfig()
   }, [])
 
   const fetchConfig = async () => {
