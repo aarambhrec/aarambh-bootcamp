@@ -1,0 +1,201 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'JetBrains Mono', monospace;
+  background-color: #0d1117;
+  color: #c9d1d9;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #010409;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #484f58;
+}
+
+/* Matrix rain effect */
+.matrix-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.05;
+}
+
+/* Glitch effect */
+.glitch {
+  position: relative;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch::before {
+  animation: glitch-anim 2s infinite;
+  clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+  transform: translate(-2px, -1px);
+}
+
+.glitch::after {
+  animation: glitch-anim 3s infinite reverse;
+  clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+  transform: translate(2px, 1px);
+}
+
+@keyframes glitch-anim {
+  0% {
+    clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+    transform: translate(0);
+  }
+  20% {
+    clip-path: polygon(0 15%, 100% 15%, 100% 45%, 0 45%);
+    transform: translate(-2px, -1px);
+  }
+  40% {
+    clip-path: polygon(0 30%, 100% 30%, 100% 70%, 0 70%);
+    transform: translate(2px, 1px);
+  }
+  60% {
+    clip-path: polygon(0 50%, 100% 50%, 100% 80%, 0 80%);
+    transform: translate(-1px, 2px);
+  }
+  80% {
+    clip-path: polygon(0 60%, 100% 60%, 100% 90%, 0 90%);
+    transform: translate(1px, -1px);
+  }
+  100% {
+    clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+    transform: translate(0);
+  }
+}
+
+/* Terminal blink */
+.terminal-cursor {
+  display: inline-block;
+  width: 10px;
+  height: 20px;
+  background-color: #00ff41;
+  margin-left: 5px;
+  animation: blink 0.7s infinite;
+}
+
+/* Code block styling */
+.code-block {
+  background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.code-block::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #00ff41, #58a6ff, #bc8cff, #ffd700);
+  border-radius: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+  animation: rotate-border 3s linear infinite;
+}
+
+.code-block:hover::before {
+  opacity: 0.3;
+}
+
+@keyframes rotate-border {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Button hover effects */
+.btn-glow {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.btn-glow::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(0, 255, 65, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn-glow:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Particle effect */
+@keyframes particle-float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(50px);
+    opacity: 0;
+  }
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #00ff41;
+  border-radius: 50%;
+  animation: particle-float 10s infinite;
+}
