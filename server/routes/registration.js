@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Registration = require('../models/Registration');
+const SiteConfig = require('../models/SiteConfig');
 const { verifyAdmin } = require('./admin');
 const { sendRegistrationEmail, sendAdminNotification } = require('../utils/emailService');
 
@@ -9,13 +10,28 @@ router.post('/', async (req, res) => {
   try {
     const registrationData = req.body;
 
-    // Check if email already exists
-    const existingRegistration = await Registration.findOne({ email: registrationData.email });
-    if (existingRegistration) {
+    // Get form fields configuration for validation
+    const config = await SiteConfig.findOne();
+    const formFields = config?.formFields || [];
+
+    // Validate based on form configuration
+    const validationErrors = await Registration.validateRegistration(registrationData, formFields);
+    if (validationErrors.length > 0) {
       return res.status(400).json({
         success: false,
-        message: 'This email is already registered! 📧'
+        message: validationErrors.join(', ')
       });
+    }
+
+    // Check if email already exists
+    if (registrationData.email) {
+      const existingRegistration = await Registration.findOne({ email: registrationData.email });
+      if (existingRegistration) {
+        return res.status(400).json({
+          success: false,
+          message: 'This email is already registered! 📧'
+        });
+      }
     }
 
     // Create new registration
